@@ -1,0 +1,7 @@
+openai
+requests
+beautifulsoup4
+numpy
+scikit-learn
+matplotlib
+python-dotenv
