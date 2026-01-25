@@ -84,3 +84,26 @@ Notes
 The system uses real web data but processes only relevant chunks (RAG best practice).
 
 The architecture is extensible and production-ready in design.
+
+
+import os
+from openai import OpenAI
+from dotenv import load_dotenv
+
+load_dotenv()
+
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
+def call_llm(system, user):
+    response = client.chat.completions.create(
+        model=os.getenv("OPENAI_MODEL", "gpt-4.1"),
+        messages=[
+            {"role": "system", "content": system},
+            {"role": "user", "content": user}
+        ],
+        temperature=0.3,
+        max_tokens=800
+    )
+    return response.choices[0].message.content
+
+
