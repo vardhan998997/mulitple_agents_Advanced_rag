@@ -160,3 +160,51 @@ def plot_confidence(items):
     plt.close()
 
     
+--_-+----------------
+
+from tools.llm import call_llm
+from tools.statistics import basic_stats
+
+
+class AnalysisAgent:
+    def run(self, state):
+        results = []
+
+        MAX_CHARS = 1500
+
+        for idx, doc in enumerate(state.documents[:2], start=1):
+            print(f"[AnalysisAgent] Preparing document {idx}")
+
+            trimmed_doc = doc[:MAX_CHARS]
+
+            print(f"[AnalysisAgent] Calling LLM for document {idx}...")
+
+            analysis_text = call_llm(
+                "You are a research analyst.",
+                f"""
+Perform comparative analysis, trend analysis,
+and causal reasoning on the following text.
+Keep the answer concise and factual.
+
+TEXT:
+{trimmed_doc}
+"""
+            )
+
+            # ✅ PRINT LLM RESPONSE CONTENT (IMPORTANT)
+            print("\n[AnalysisAgent] LLM OUTPUT (preview):\n")
+            print(analysis_text[:500])
+            print("\n--------------------------------------\n")
+
+            print(f"[AnalysisAgent] LLM response received for document {idx}")
+
+            stats = basic_stats(trimmed_doc)
+
+            results.append({
+                "analysis": analysis_text,
+                "statistics": stats
+            })
+
+        state.analysis = results
+
+        print("[AnalysisAgent] Analysis completed")
