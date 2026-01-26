@@ -86,80 +86,6 @@ The system uses real web data but processes only relevant chunks (RAG best pract
 The architecture is extensible and production-ready in design.
 
 
-import os
-from openai import OpenAI
-from dotenv import load_dotenv
-
-load_dotenv()
-
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-
-def call_llm(system, user):
-    response = client.chat.completions.create(
-        model=os.getenv("OPENAI_MODEL", "gpt-4.1"),
-        messages=[
-            {"role": "system", "content": system},
-            {"role": "user", "content": user}
-        ],
-        temperature=0.3,
-        max_tokens=800
-    )
-    return response.choices[0].message.content
-
-
-
-
-
-from tools.visualization import plot_confidence
-
-
-class OutputAgent:
-    def run(self, state):
-        print("\n[OutputAgent] Generating final research report...\n")
-
-        # Show confidence visualization
-        plot_confidence(state.validated_claims)
-
-        report_lines = []
-        report_lines.append("===== STRUCTURED RESEARCH REPORT =====\n")
-
-        report_lines.append("Executive Summary:")
-        report_lines.append(
-            "This report analyzes the impact of COVID-19 on renewable energy "
-            "investment patterns in developing countries and the regulatory "
-            "responses observed across regions.\n"
-        )
-
-        report_lines.append("Key Findings:")
-
-        for idx, item in enumerate(state.validated_claims, start=1):
-            report_lines.append(
-                f"{idx}. {item['claim']} (Confidence: {item['confidence']})"
-            )
-
-        report_lines.append("\nNotes:")
-        report_lines.append(
-            "• The system uses real web data but processes only relevant chunks (RAG best practice).\n"
-            "• Analysis is multi-hop and cross-document.\n"
-            "• Architecture is extensible and production-ready in design."
-        )
-
-        final_report = "\n".join(report_lines)
-
-        # ✅ Save to shared state
-        state.final_report = final_report
-
-        # ✅ FORCE terminal output (this was missing clarity)
-        print(final_report)
-        print("\n===== END OF REPORT =====\n")
-
-        
-
-https://drive.google.com/file/d/1Vcervvh_Wv8GuGJEwf-jZl2C1i45yExA/view?usp=sharing
-
-
-
-
 
 from tools.visualization import plot_confidence
 
@@ -206,11 +132,21 @@ class OutputAgent:
 
 
 
-# tools/visualization.py
+
+
+
+
 import matplotlib.pyplot as plt
 
 
 def plot_confidence(items):
+    """
+    Plots confidence scores for validated claims.
+    """
+    if not items:
+        print("[Visualization] No confidence data to plot.")
+        return
+
     scores = [item["confidence"] for item in items]
 
     plt.bar(range(len(scores)), scores)
@@ -218,10 +154,9 @@ def plot_confidence(items):
     plt.ylabel("Confidence Score")
     plt.title("Claim Confidence")
 
+    # Non-blocking visualization
     plt.show(block=False)
     plt.pause(3)
     plt.close()
-
-
 
     
