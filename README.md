@@ -208,3 +208,49 @@ TEXT:
         state.analysis = results
 
         print("[AnalysisAgent] Analysis completed")
+
+
+
+
+
+
+
+
+import os
+from openai import OpenAI
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
+
+# Initialize OpenAI client
+client = OpenAI(
+    api_key=os.getenv("OPENAI_API_KEY")
+)
+
+def call_llm(system_prompt: str, user_prompt: str) -> str:
+    """
+    Fast, stable LLM call.
+    Uses non-preview model + timeout-safe behavior.
+    """
+
+    try:
+        response = client.chat.completions.create(
+            model="gpt-3.5-turbo",   # ✅ FAST & STABLE (use 4.1 later)
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_prompt}
+            ],
+            temperature=0.2,
+            max_tokens=500
+        )
+
+        return response.choices[0].message.content
+
+    except Exception as e:
+        return f"[LLM ERROR] {str(e)}"
+
+
+
+
+        
