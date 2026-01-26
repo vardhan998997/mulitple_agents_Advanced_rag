@@ -157,3 +157,71 @@ class OutputAgent:
 
 https://drive.google.com/file/d/1Vcervvh_Wv8GuGJEwf-jZl2C1i45yExA/view?usp=sharing
 
+
+
+
+
+from tools.visualization import plot_confidence
+
+
+class OutputAgent:
+    def run(self, state):
+        print("\n[OutputAgent] Generating final research report...\n")
+
+        # Show confidence visualization
+        plot_confidence(state.validated_claims)
+
+        report_lines = []
+        report_lines.append("===== STRUCTURED RESEARCH REPORT =====\n")
+
+        report_lines.append("Executive Summary:")
+        report_lines.append(
+            "This report analyzes the impact of COVID-19 on renewable energy "
+            "investment patterns in developing countries and the regulatory "
+            "responses observed across regions.\n"
+        )
+
+        report_lines.append("Key Findings:")
+
+        for idx, item in enumerate(state.validated_claims, start=1):
+            report_lines.append(
+                f"{idx}. {item['claim']} (Confidence: {item['confidence']})"
+            )
+
+        report_lines.append("\nNotes:")
+        report_lines.append(
+            "• The system uses real web data but processes only relevant chunks (RAG best practice).\n"
+            "• Analysis is multi-hop and cross-document.\n"
+            "• Architecture is extensible and production-ready in design."
+        )
+
+        final_report = "\n".join(report_lines)
+
+        # Save to shared state
+        state.final_report = final_report
+
+        # Force terminal output
+        print(final_report)
+        print("\n===== END OF REPORT =====\n")
+
+
+
+# tools/visualization.py
+import matplotlib.pyplot as plt
+
+
+def plot_confidence(items):
+    scores = [item["confidence"] for item in items]
+
+    plt.bar(range(len(scores)), scores)
+    plt.xlabel("Claim Index")
+    plt.ylabel("Confidence Score")
+    plt.title("Claim Confidence")
+
+    plt.show(block=False)
+    plt.pause(3)
+    plt.close()
+
+
+
+    
