@@ -261,3 +261,69 @@ def call_llm(system_prompt: str, user_prompt: str) -> str:
       https://drive.google.com/file/d/1Vcervvh_Wv8GuGJEwf-jZl2C1i45yExA/view?usp=sharing
 
 
+AI_PRODUCT_TOO_CODE/
+│
+├── app/
+│   │
+│   ├── api/
+│   │   ├── __pycache__/
+│   │   ├── v1/
+│   │   │   ├── __pycache__/
+│   │   │   ├── __init__.py
+│   │   │   ├── admin.py
+│   │   │   ├── admin_users.py
+│   │   │   ├── auth.py
+│   │   │   ├── epics.py
+│   │   │   ├── projects.py
+│   │   │   ├── research.py
+│   │   │   ├── specs.py
+│   │   │   ├── stories.py
+│   │   │   └── deps.py
+│   │
+│   ├── core/
+│   │
+│   ├── models/
+│   │   ├── __pycache__/
+│   │   ├── __init__.py
+│   │   ├── epics.py
+│   │   ├── project.py
+│   │   ├── research_artifact.py
+│   │   ├── spec_artifact.py
+│   │   ├── stories.py
+│   │   └── user.py
+│   │
+│   ├── schemas/
+│   │   ├── __pycache__/
+│   │   ├── __init__.py
+│   │   ├── epics.py
+│   │   ├── project.py
+│   │   ├── research.py
+│   │   ├── spec.py
+│   │   ├── stories.py
+│   │   └── user.py
+│   │
+│   ├── services/
+│   │   ├── epics/
+│   │   ├── research/
+│   │   ├── specs/
+│   │   └── stories/
+│   │
+│   ├── utils/
+│   │   ├── __init__.py
+│   │   └── database.py
+│   │
+│   ├── scripts/
+│   │
+│   ├── uploads/
+│   │
+│   └── main.py
+│
+├── venv/
+│
+├── .env
+├── .gitignore
+├── check_models.py
+├── init_db.py
+└── README.md
+
+
